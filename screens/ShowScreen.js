@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 20,
     marginBottom: 5,
-    fontWeight: "italic",
+    fontWeight: "normal",
     color: "#264653",
   },
   title: {

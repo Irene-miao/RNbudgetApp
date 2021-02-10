@@ -137,8 +137,8 @@ const imageName = "image";
           <Image
             source={item.image}
             style={{
-              width: 70,
-              height: 70,
+              width: 30,
+              height: 30,
             }}
           />
         </TouchableOpacity>
@@ -178,14 +178,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   editBtn: {
-    marginLeft: 60,
+    marginLeft: 10,
   },
   deleteBtn: {
-    marginLeft: 100,
+    marginLeft: 30,
   },
   text: {
-    marginRight: 200,
-    fontSize: 25,
+    marginRight: 50,
+    fontSize: 20,
     color: "#2274A5",
   },
 });
