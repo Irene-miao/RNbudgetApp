@@ -93,12 +93,9 @@ export default function ExpenseScreen({ navigation, route }) {
   }
 const imageName = "image";
   // This deletes an individual note
-  function deleteExpense(id, url) {
+  function deleteExpense(id) {
     console.log("Deleting " + id);
     db.doc(id).delete(); // this is much simpler now we have the Firestore ID
-    const ref = storage.refFromURL(url);
-    ref.delete();
-    console.log("Image is deleted successfully!");
   }
 
   {/*function editExpense(id) {
