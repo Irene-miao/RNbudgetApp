@@ -9,11 +9,13 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import {storage} from "../database/firebaseDB";
 import { v4 as uuidv4 } from "uuid";
+import { setStatusBarStyle } from "expo-status-bar";
 
 export default function AddScreen({ navigation }) {
   const [product, setProduct] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+  const [url, setUrl] = useState("");
 
 
   async function chooseImage() {
@@ -45,6 +47,7 @@ export default function AddScreen({ navigation }) {
     console.log(result);
     const download = ref.getDownloadUrl();
     console.log(download);
+    setUrl(download);
   } catch(error) {
     return error;
   }
@@ -74,7 +77,7 @@ export default function AddScreen({ navigation }) {
         <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.saveBtn}
-          onPress={() => navigation.navigate("Expenses", { product, price, image })}
+          onPress={() => navigation.navigate("Expenses", { product, price, image, url })}
         >
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>

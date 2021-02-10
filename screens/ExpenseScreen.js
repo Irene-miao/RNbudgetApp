@@ -17,6 +17,8 @@ export default function ExpenseScreen({ navigation, route }) {
   const [image2, setImage2] = useState("");
   const [product2, setProduct2] = useState("");
   const [price2, setPrice2] = useState("");
+  const [url, setUrl] = useState("");
+
   const db = firebase.firestore().collection("expenses");
 
   // When the screen loads, we start monitoring Firebase
@@ -58,7 +60,8 @@ export default function ExpenseScreen({ navigation, route }) {
 
   // Monitor route.params for changes and add items to the database
   useEffect(() => {
-    if ((route.params?.product, route.params?.price, route.params?.image)) {
+    if ((route.params?.url, route.params?.product, route.params?.price, route.params?.image)) {
+      setUrl(route.params.url);
       const newExpense = {
         product: route.params.product,
         price: route.params.price,
@@ -66,10 +69,11 @@ export default function ExpenseScreen({ navigation, route }) {
         created: firebase.firestore.FieldValue.serverTimestamp(),
         // alternative:
         // created: Date.now().toString(),
+    
       };
       db.add(newExpense);
     }
-  }, [route.params?.product, route.params?.price, route.params?.image]);
+  }, [route.params?.url, route.params?.product, route.params?.price, route.params?.image]);
 
   useEffect(
     (id) => {
@@ -87,19 +91,17 @@ export default function ExpenseScreen({ navigation, route }) {
   function addExpense() {
     navigation.navigate("Create");
   }
-
+const imageName = "image";
   // This deletes an individual note
-  function deleteExpense(id) {
+  function deleteExpense(id, url) {
     console.log("Deleting " + id);
     db.doc(id).delete(); // this is much simpler now we have the Firestore ID
-    const ref = storage
-      .ref()
-      .child("images/")
-      .child(`${uuidv4()}-${imageName}`);
+    const ref = storage.refFromURL(url);
     ref.delete();
+    console.log("Image is deleted successfully!");
   }
 
-  function editExpense(id) {
+  {/*function editExpense(id) {
     navigation.navigate("Edit");
     console.log("Editing " + id);
     db.doc(id).set({
@@ -107,7 +109,12 @@ export default function ExpenseScreen({ navigation, route }) {
       price: price2,
       image: image2,
       created: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    }, {merge: true});
+  }*/}
+
+  function showExpense(id) {
+    navigation.navigate("Show", {id});
+    console.log("Showing " + id);
   }
 
   // The function to render each row in our FlatList
@@ -124,7 +131,10 @@ export default function ExpenseScreen({ navigation, route }) {
           justifyContent: "space-around",
         }}
       >
-        <TouchableOpacity style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+         style={{ flexDirection: "row" }}
+         onPress={() => showExpense(item.id)}
+         >
           <Text style={styles.text}>{item.product}</Text>
           <Text style={styles.text}>{item.price}</Text>
           <Image
